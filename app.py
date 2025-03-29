@@ -3,13 +3,14 @@ import numpy as np
 import tensorflow as tf
 from PIL import Image
 import io
+import os
 
 # Load the trained model
 model = tf.keras.models.load_model("mnist_model.h5")
 
 app = Flask(__name__)
 
-@app.route("/test",methods=["GET"])
+@app.route("/test", methods=["GET"])
 def test():
     return jsonify({"message": "Hello World!"})
 
@@ -29,5 +30,10 @@ def predict():
 
     return jsonify({"prediction": int(predicted_digit)})
 
+@app.route("/")
+def home():
+    return "Hello, Flask is running!"
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Get PORT from environment variable
+    app.run(host="0.0.0.0", port=port, debug=True)  # Ensure it binds to 0.0.0.0
